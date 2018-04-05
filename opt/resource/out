@@ -42,7 +42,7 @@ def put(src):
 
     with postfix():
         with SMTP_SLL(get_host(payload),get_port(payload)) as smtp:
-	    smtp.login(get_user(payload), get_pass(payload)
+            smtp.login(get_user(payload), get_pass(payload)
             smtp.send_message(message)
             # This is lame, but it seems to take a while until postfix delivers the message
             time.sleep(1)
