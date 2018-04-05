@@ -41,7 +41,8 @@ def put(src):
     add_attachments(src, message, payload)
 
     with postfix():
-        with SMTP(get_host(payload)) as smtp:
+        with SMTP_SLL(get_host(payload),get_port(payload)) as smtp:
+	    smtp.login(get_user(payload), get_pass(payload)
             smtp.send_message(message)
             # This is lame, but it seems to take a while until postfix delivers the message
             time.sleep(1)
@@ -59,6 +60,16 @@ def get_sender(payload):
 
 def get_host(payload):
     return get_value_from_payload(payload, 'source', 'host', default='localhost', optional=True)
+
+def get_user(payload):
+    return get_value_from_payload(payload, 'source', 'user', optional=True)
+
+def get_pass(payload):
+    return get_value_from_payload(payload, 'source', 'pass', optional=True)
+
+def get_port(payload):
+    return get_value_from_payload(payload, 'source', 'port', optional=True)
+
 
 def get_recipients(src, payload):
     recipients = get_value_from_payload(payload, 'params', 'to', optional=True)
